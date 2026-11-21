@@ -1,0 +1,86 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lakshyapocketlab-hello"
+dynamic = ["version"]
+description = "Official Python SDK for Hello, the WhatsApp Business API. Send messages, templates and webhooks."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Lakshya Pocket Lab" }]
+keywords = [
+  "whatsapp",
+  "whatsapp-business",
+  "whatsapp-api",
+  "wa-business",
+  "whatsapp-cloud-api",
+  "mcp",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Communications :: Chat",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
+  "Framework :: AsyncIO",
+]
+dependencies = ["httpx>=0.25,<1"]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "pytest-asyncio>=0.23",
+  "pytest-cov>=5",
+  "respx>=0.21",
+  "ruff>=0.5",
+  "mypy>=1.10",
+]
+
+[project.urls]
+Homepage = "https://github.com/lakshyapocketlab/hello-python"
+Repository = "https://github.com/lakshyapocketlab/hello-python"
+Issues = "https://github.com/lakshyapocketlab/hello-python/issues"
+Changelog = "https://github.com/lakshyapocketlab/hello-python/blob/main/CHANGELOG.md"
+
+[tool.hatch.version]
+path = "src/lakshyapocketlab_hello/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lakshyapocketlab_hello"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "examples", "README.md", "LICENSE", "CHANGELOG.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "--cov=lakshyapocketlab_hello --cov-branch --cov-report=term-missing --cov-fail-under=100"
+
+[tool.coverage.run]
+source = ["lakshyapocketlab_hello"]
+branch = true
+
+[tool.mypy]
+strict = true
+files = ["src", "tests", "examples"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "SIM", "RUF"]
