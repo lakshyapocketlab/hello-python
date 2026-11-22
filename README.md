@@ -276,7 +276,15 @@ Runnable programs live in [`examples/`](examples). Run them with the package ins
 | [`error_handling.py`](examples/error_handling.py) | Branch on `AuthenticationError`, `RateLimitError`, `NotFoundError` and `APIError` | `<phone_number_id> <to> "<text>"` |
 | [`list_templates.py`](examples/list_templates.py) | List approved templates across all pages | `<waba_id>` |
 
-More examples: [hello-examples](https://github.com/lakshyapocketlab/hello-examples).
+### More examples
+
+The [hello-examples](https://github.com/lakshyapocketlab/hello-examples) repository has more runnable programs:
+
+- [`message-types/python`](https://github.com/lakshyapocketlab/hello-examples/tree/main/message-types/python): one example per message type (media, location, interactive, templates, ...) with delivery tracking
+- [`smoke-test/python`](https://github.com/lakshyapocketlab/hello-examples/tree/main/smoke-test/python): a live smoke test of this SDK against the real API
+- [`webhooks`](https://github.com/lakshyapocketlab/hello-examples/tree/main/webhooks): receive and verify webhooks
+- [`n8n`](https://github.com/lakshyapocketlab/hello-examples/tree/main/n8n): send messages from n8n workflows
+- [`ai-agents`](https://github.com/lakshyapocketlab/hello-examples/tree/main/ai-agents): connect AI agents over MCP
 
 ## API reference
 
