@@ -28,9 +28,9 @@ def test_negative_retries_rejected() -> None:
 def test_api_key_from_env_and_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("HELLO_API_KEY", "hello_live_env")
     client = Hello()
-    assert client.base_url == "https://api.lakshyapocketlab.com"
+    assert client.base_url == "https://helloapi.lakshyapocketlab.com"
     with respx.mock() as router:
-        route = router.get("https://api.lakshyapocketlab.com/v1/ping").mock(
+        route = router.get("https://helloapi.lakshyapocketlab.com/v1/ping").mock(
             return_value=ok({"status": "ok"})
         )
         assert client.ping() == {"status": "ok"}
@@ -38,10 +38,27 @@ def test_api_key_from_env_and_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
     client.close()
 
 
+def test_api_key_passed_directly_without_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("HELLO_API_KEY", raising=False)
+    with respx.mock() as router, Hello(api_key="hello_live_direct") as client:
+        route = router.get("https://helloapi.lakshyapocketlab.com/v1/ping").mock(return_value=ok())
+        client.ping()
+        assert route.calls.last.request.headers["authorization"] == "Bearer hello_live_direct"
+
+
+async def test_async_api_key_passed_directly_without_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("HELLO_API_KEY", raising=False)
+    with respx.mock() as router:
+        route = router.get("https://helloapi.lakshyapocketlab.com/v1/ping").mock(return_value=ok())
+        async with AsyncHello(api_key="hello_live_direct") as client:
+            await client.ping()
+        assert route.calls.last.request.headers["authorization"] == "Bearer hello_live_direct"
+
+
 def test_explicit_key_beats_env(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("HELLO_API_KEY", "env")
     with respx.mock() as router, Hello(api_key="explicit") as client:
-        route = router.get("https://api.lakshyapocketlab.com/v1/ping").mock(return_value=ok())
+        route = router.get("https://helloapi.lakshyapocketlab.com/v1/ping").mock(return_value=ok())
         client.ping()
         assert route.calls.last.request.headers["authorization"] == "Bearer explicit"
 
@@ -66,7 +83,7 @@ def test_custom_http_client_is_used_and_not_closed() -> None:
     http = httpx.Client()
     client = Hello(api_key="k", http_client=http)
     with respx.mock() as router:
-        router.get("https://api.lakshyapocketlab.com/v1/ping").mock(return_value=ok())
+        router.get("https://helloapi.lakshyapocketlab.com/v1/ping").mock(return_value=ok())
         client.ping()
     client.close()
     assert not http.is_closed
@@ -77,7 +94,7 @@ async def test_async_custom_http_client_not_closed() -> None:
     http = httpx.AsyncClient()
     async with AsyncHello(api_key="k", http_client=http) as client:
         with respx.mock() as router:
-            router.get("https://api.lakshyapocketlab.com/v1/ping").mock(return_value=ok())
+            router.get("https://helloapi.lakshyapocketlab.com/v1/ping").mock(return_value=ok())
             await client.ping()
     assert not http.is_closed
     await http.aclose()
@@ -95,8 +112,15 @@ async def test_async_owned_client_closed_on_exit() -> None:
     assert inner.is_closed
 
 
+def test_base_url_from_env_and_explicit_wins(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("HELLO_BASE_URL", "https://staging.example.com/")
+    assert Hello(api_key="k").base_url == "https://staging.example.com"
+    assert AsyncHello(api_key="k").base_url == "https://staging.example.com"
+    assert Hello(api_key="k", base_url="https://x.test").base_url == "https://x.test"
+
+
 def test_version_exported() -> None:
-    assert __version__ == "0.1.0"
+    assert __version__ == "0.1.1"
 
 
 def test_async_base_url_property() -> None:

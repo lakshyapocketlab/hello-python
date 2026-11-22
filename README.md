@@ -3,7 +3,9 @@
 Official Python SDK for Hello, the WhatsApp Business API. Send messages, templates and webhooks.
 
 [![CI](https://github.com/lakshyapocketlab/hello-python/actions/workflows/ci.yml/badge.svg)](https://github.com/lakshyapocketlab/hello-python/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/lakshyapocketlab-hello)](https://pypi.org/project/lakshyapocketlab-hello/)
+[![PyPI version](https://img.shields.io/pypi/v/lakshyapocketlab-hello)](https://pypi.org/project/lakshyapocketlab-hello/)
+[![Python versions](https://img.shields.io/pypi/pyversions/lakshyapocketlab-hello)](https://pypi.org/project/lakshyapocketlab-hello/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A typed, sync and async client for the Hello `/v1` Integration API (a drop-in for the WhatsApp
 Cloud API). Python 3.9+, one dependency (`httpx`), `py.typed`, 100% test coverage.
@@ -18,21 +20,23 @@ The distribution is `lakshyapocketlab-hello`; the import package is `lakshyapock
 
 ## Quickstart
 
-Create an API key (`hello_live_...`) in the Hello dashboard and export it:
-
-```bash
-export HELLO_API_KEY=hello_live_xxxxxxxx
-```
+Create an API key (`hello_live_...`) in the Hello dashboard and pass it directly:
 
 ```python
 from lakshyapocketlab_hello import Hello
 
-with Hello() as client:  # reads HELLO_API_KEY
+with Hello(api_key="hello_live_xxxxxxxx") as client:
     number = client.phone_numbers.list()["data"][0]
     sent = client.messages.send_text(
         number["phone_number_id"], "+919999999999", "Hello from Python!"
     )
     print(sent["messages"][0]["hello_id"])
+```
+
+Or omit `api_key` and export `HELLO_API_KEY` instead (`Hello()` and `AsyncHello()` read it):
+
+```bash
+export HELLO_API_KEY=hello_live_xxxxxxxx
 ```
 
 Async:
@@ -43,7 +47,7 @@ from lakshyapocketlab_hello import AsyncHello
 
 
 async def main() -> None:
-    async with AsyncHello() as client:
+    async with AsyncHello(api_key="hello_live_xxxxxxxx") as client:
         await client.ping()
         await client.messages.send_template(
             "106540352242922",
@@ -65,8 +69,8 @@ Hello(api_key=None, base_url=None, timeout=30, max_retries=2, http_client=None)
 
 | Option | Default | Notes |
 |---|---|---|
-| `api_key` | env `HELLO_API_KEY` | `HelloError` is raised if neither is set |
-| `base_url` | `https://api.lakshyapocketlab.com` | staging / self-host |
+| `api_key` | env `HELLO_API_KEY` (the argument wins) | `HelloError` is raised if neither is set |
+| `base_url` | env `HELLO_BASE_URL`, else `https://helloapi.lakshyapocketlab.com` | staging / self-host; the argument wins over the env var |
 | `timeout` | `30` | seconds, or an `httpx.Timeout` |
 | `max_retries` | `2` | see [Retries](#retries) |
 | `http_client` | none | your own `httpx.Client` / `httpx.AsyncClient` (proxies, mTLS); you close it |

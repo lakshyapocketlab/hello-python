@@ -10,7 +10,7 @@ import respx
 from lakshyapocketlab_hello import AsyncHello, Hello
 from lakshyapocketlab_hello import _client as client_module
 
-BASE = "https://api.lakshyapocketlab.com"
+BASE = "https://helloapi.lakshyapocketlab.com"
 Client = Union[Hello, AsyncHello]
 
 

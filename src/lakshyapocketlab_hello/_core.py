@@ -19,8 +19,9 @@ from . import errors
 from ._version import __version__
 from .types import FileInput
 
-DEFAULT_BASE_URL = "https://api.lakshyapocketlab.com"
+DEFAULT_BASE_URL = "https://helloapi.lakshyapocketlab.com"
 ENV_API_KEY = "HELLO_API_KEY"
+ENV_BASE_URL = "HELLO_BASE_URL"
 USER_AGENT = f"lakshyapocketlab-hello-python/{__version__}"
 IDEMPOTENCY_HEADER = "Idempotency-Key"
 
@@ -174,7 +175,7 @@ class ClientConfig:
         if max_retries < 0:
             raise ValueError("max_retries must be >= 0")
         self.api_key = resolve_api_key(api_key)
-        self.base_url = (base_url or DEFAULT_BASE_URL).rstrip("/")
+        self.base_url = (base_url or os.environ.get(ENV_BASE_URL) or DEFAULT_BASE_URL).rstrip("/")
         self.timeout = timeout
         self.max_retries = max_retries
 
