@@ -3,6 +3,7 @@
 Official Python SDK for Hello, the WhatsApp Business API. Send messages, templates and webhooks.
 
 [![CI](https://github.com/lakshyapocketlab/hello-python/actions/workflows/ci.yml/badge.svg)](https://github.com/lakshyapocketlab/hello-python/actions/workflows/ci.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/lakshyapocketlab/hello-python/badge)](https://scorecard.dev/viewer/?uri=github.com/lakshyapocketlab/hello-python)
 [![PyPI version](https://img.shields.io/pypi/v/lakshyapocketlab-hello)](https://pypi.org/project/lakshyapocketlab-hello/)
 [![Python versions](https://img.shields.io/pypi/pyversions/lakshyapocketlab-hello)](https://pypi.org/project/lakshyapocketlab-hello/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
