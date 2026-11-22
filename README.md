@@ -21,7 +21,7 @@ pip install lakshyapocketlab-hello
 
 The distribution is `lakshyapocketlab-hello`; the import package is `lakshyapocketlab_hello`.
 
-**2. Get an API key.** Create one (`hello_live_...`) on the API Keys page of the [Hello dashboard](https://hello.lakshyapocketlab.com), then export it:
+**2. Get an API key.** Create one (`hello_live_...`) in the [Hello dashboard](https://hello.lakshyapocketlab.com) under **Integrations**, then export it:
 
 ```bash
 export HELLO_API_KEY=hello_live_...
@@ -55,7 +55,7 @@ Both are shown for each number in the Hello dashboard. You can also read them in
 ```python
 numbers = client.phone_numbers.list()["data"]
 pnid = numbers[0]["phone_number_id"]  # messages.*, media.*
-waba_id = numbers[0]["waba_id"]       # templates.*
+waba_id = numbers[0]["waba_id"]  # templates.*
 ```
 
 ### API key and base URL
@@ -64,7 +64,7 @@ Pass the key explicitly, or leave it out and set `HELLO_API_KEY`:
 
 ```python
 client = Hello(api_key="hello_live_...")  # the argument wins
-client = Hello()                          # reads HELLO_API_KEY; HelloError if neither is set
+client = Hello()  # reads HELLO_API_KEY; HelloError if neither is set
 ```
 
 The API host defaults to `https://helloapi.lakshyapocketlab.com`. Override it with `base_url` or the `HELLO_BASE_URL` environment variable (the argument wins over the variable). Use this for staging or a self-hosted gateway.
@@ -107,7 +107,10 @@ client.messages.send_template(
     "order_shipped",
     "en_US",
     components=[
-        {"type": "body", "parameters": [{"type": "text", "text": "Asha"}, {"type": "text", "text": "#10432"}]}
+        {
+            "type": "body",
+            "parameters": [{"type": "text", "text": "Asha"}, {"type": "text", "text": "#10432"}],
+        }
     ],
 )
 ```
@@ -118,7 +121,9 @@ Media uploaded from one number can only be sent from that number. `upload` takes
 
 ```python
 media = client.media.upload(pnid, "invoice.pdf", "application/pdf")  # {"id": "<media_id>"}
-client.messages.send_media(pnid, "+16505551234", "document", media_id=media["id"], filename="invoice.pdf")
+client.messages.send_media(
+    pnid, "+16505551234", "document", media_id=media["id"], filename="invoice.pdf"
+)
 ```
 
 Media at a public URL needs no upload: pass `link=` instead of `media_id=`. For other message types (reaction, location, interactive, ...), call `messages.send` with the raw Cloud API body.
@@ -127,7 +132,7 @@ To download inbound media:
 
 ```python
 data = client.media.download(inbound_media_id)  # bytes
-info = client.media.get(inbound_media_id)        # mime type, size, sha256
+info = client.media.get(inbound_media_id)  # mime type, size, sha256
 ```
 
 ### Mark as read
@@ -191,8 +196,8 @@ created = client.templates.create(
 )
 client.templates.edit(created["id"], {"category": "UTILITY"})
 client.templates.create_bulk(waba_id, [template_a, template_b])  # up to 100 create bodies
-client.templates.sync(waba_id)                    # re-read every template from Meta
-client.templates.delete(template_id)              # one language
+client.templates.sync(waba_id)  # re-read every template from Meta
+client.templates.delete(template_id)  # one language
 client.templates.delete_by_name(waba_id, "order_shipped")  # every language
 ```
 
@@ -201,8 +206,8 @@ A full paging loop is in [`examples/list_templates.py`](examples/list_templates.
 ### Phone numbers
 
 ```python
-numbers = client.phone_numbers.list()                  # all numbers of the key's organization
-waba = client.phone_numbers.list_for_waba(waba_id)     # numbers of one WABA
+numbers = client.phone_numbers.list()  # all numbers of the key's organization
+waba = client.phone_numbers.list_for_waba(waba_id)  # numbers of one WABA
 ```
 
 ### Direct webhook (webhook override)
@@ -217,7 +222,7 @@ client.webhook_override.set(
     acknowledge_no_tracking=True,
 )
 current = client.webhook_override.get(pnid, refresh=True)  # checks Meta's live setting
-client.webhook_override.reapply(pnid)                       # when status is "draft"
+client.webhook_override.reapply(pnid)  # when status is "draft"
 client.webhook_override.remove(pnid)
 ```
 

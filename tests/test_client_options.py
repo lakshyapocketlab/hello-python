@@ -120,7 +120,7 @@ def test_base_url_from_env_and_explicit_wins(monkeypatch: pytest.MonkeyPatch) ->
 
 
 def test_version_exported() -> None:
-    assert __version__ == "0.1.1"
+    assert __version__ == "1.0.0"
 
 
 def test_async_base_url_property() -> None:
