@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/lakshyapocketlab/.github/main/assets/hello-logo-on-dark.svg">
+    <img alt="Hello" src="https://raw.githubusercontent.com/lakshyapocketlab/.github/main/assets/hello-logo.svg" height="56">
+  </picture>
+</p>
+
 # Hello Python SDK for the WhatsApp Business API
 
 Official Python SDK for Hello, the WhatsApp Business API. Send messages, templates and webhooks.
